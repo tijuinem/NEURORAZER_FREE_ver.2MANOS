@@ -15,15 +15,14 @@ Ambos proyectos se liberan de forma Open Source en Github en Dic. 2013, para que
 by Tijuinem :   tijuinem -at- gmail -dot- com  
 
 
-Indice de versiones
+Indice de versiones.
 ===================
-versión alfa 1.0  11-12
-2013  //versión modo local
+versión alfa 1.0  11-122013   //versión modo local.
 Versión alfa 1.1  12-12-2013  //carga pantallas ok.                                   
 versión alfa 1.2  13-12-2013  //aleatorio de pantallas. aleatorio de aparición punto rojo.
 
 
-MEJORAS PENDIENTES
+MEJORAS PENDIENTES.
 ==================
 1- Código para FPS. Velocidad estándar.
 2- Redefinir teclado.
