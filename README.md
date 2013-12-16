@@ -30,3 +30,4 @@ MEJORAS PENDIENTES.
 4- Mejoras gráficas.
 5- Mejoras en el sonido.
 6- Conversión de Allegro 4 a 5.
+7- Cambiar a ut8 y añadir eñes y tildes en los textos
