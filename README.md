@@ -1,4 +1,4 @@
-NEURORAZER_FREE_ver.2MANOS
+NEURORAZER FREE ver.2MANOS
 ==========================
 ###NEURORAZER Edición Gratuita - versión a 2 MANOS
 
