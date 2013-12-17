@@ -1,6 +1,7 @@
 NEURORAZER FREE ver.2MANOS
 ==========================
-###NEURORAZER Edición Gratuita - versión a 2 MANOS
+
+###Clon gratuito del juego NeuroRacer. 2 coches. version a 2 manos
 
 NeuroRAZER es un videojuego de coches gratuito creado para mejorar el rendimiento cognitivo. 
 NeuroRAZER versión "a dos manos" es la versión libre del juego Neuroracer; en este caso poniéndolo algo más difícil con dos coches en pantalla. Está hecho para ser controlado por una sóla persona; ya que solo usa dos teclas por cada coche.
