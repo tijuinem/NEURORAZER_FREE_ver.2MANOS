@@ -18,7 +18,7 @@ Ambos proyectos se liberan de forma Open Source en Github en Dic. 2013, para que
 * Versión alfa 1.0  11-12-2013  .versión modo local. probando scroll.
 * Versión alfa 1.1  12-12-2013  .carga pantallas ok.                                   
 * Versión alfa 1.2  13-12-2013  .aleatorio de pantallas. aleatorio de aparición Punto Rojo.
-
+* Versión Beta 1.0  25-12-2013  .coches. camiones. seleccion o no de 2 tarea. final.
 
 ###Mejoras Pendientes.
 * Código para FPS. Velocidad estándar para diferentes ordenadores. EStá el código pero no probado. En estos momentos está bajo un Delay editable. 
