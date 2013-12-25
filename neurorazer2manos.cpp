@@ -40,7 +40,7 @@
  int velocidad_scroll = 1; //1 aconsejable si no funciona el fps.
  int retraso_pintar = 1;   //1 si no FPS
  bool mostramos_coches=false, mostramos_bicis =false, mostramos_camiones = false;
- int numero_coches_a_incrementar =1, numero_bicis_a_incrementar =1 ,numero_camiones_a_incrementar =1; 
+ int numero_coches_a_incrementar =0, numero_bicis_a_incrementar =0 ,numero_camiones_a_incrementar =0; 
  char esto_es_si_bicis [20]=      "BICIS       SI",      esto_es_no_bicis [30]= "BICIS     NO(F3)";
  char esto_es_si_coches [20]=     "COCHES      SI",     esto_es_no_coches [30]= "COCHES    NO(F4)"; 
  char esto_es_si_camiones [20]=   "CAMIONES    SI",   esto_es_no_camiones [30]= "CAMIONES  NO(F5)"; 
@@ -152,9 +152,8 @@ do
  if (recorre_y <= size_mapa_y + modo_pantallaY)
  {
       recorre_y = recorre_y + velocidad_scroll;
-      //blit(fondo1, screen, 0, size_mapa_y - size_pantalla_mostar - recorre_y,0, 0, size_mapa_x, size_mapa_y);       //la primera pantalla empieza en el tamaño del mapa menos 480.
-     blit(fondo1, screen, 0, size_mapa_y - 2*size_pantalla_mostar - recorre_y,0, 0, size_mapa_x, size_mapa_y);       //la primera pantalla empieza en el tamaño del mapa menos 480.
-     
+      blit(fondo1, screen, 0, size_mapa_y - modo_pantallaX  - recorre_y , 0, 0, modo_pantallaX , modo_pantallaY );       //la primera pantalla empieza en el tamaño del mapa menos 480.
+      
       textprintf(screen, font, 10,10, palette_color[12], "Pantalla  %d", fondo_pantalla);
       textprintf(screen, font, 10,20, palette_color[12], "VIDA PPAL  %d", vida_ppal);
       textprintf(screen, font, 10,30, palette_color[12], "PUNTOS     %d", puntos_ppal);
@@ -179,12 +178,14 @@ do
       draw_sprite(screen, cochePPAL1, coordX_coche_1, coordY_coche_1); 
       draw_sprite(screen, cochePPAL2, coordX_coche_2, coordY_coche_2);
 
-          if ( (recorre_y >= 8000) &&  (fin_juego == 0)) 
+          if ( (recorre_y >= size_mapa_y) &&  (fin_juego == 0)) 
           {
           fondo_pantalla =  rand() % pantallas_en_disco ;                       //cojo una pantalla aleatoria
-          recorre_y = 0;
+          recorre_y = - modo_pantallaY;
           pantallas_recorridas ++;
-          size_pantalla_mostar = 0;  
+          size_pantalla_mostar = 0;
+          //textprintf(screen, font, 310,50, palette_color[15], "Vida + 100   %d", vida_ppal);
+          vida_ppal = vida_ppal +100;
           carga_pantalla (fondo_pantalla);
           if (mostramos_bicis  == true )                                        //lamo a los vehiculos a mostrar tantas veces como vaya marcando. cada vez, 6 coches.
               {

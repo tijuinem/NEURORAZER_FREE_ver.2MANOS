@@ -18,9 +18,9 @@ Order=0,3,4,5
 [Editor_0]
 Open=1
 Top=1
-CursorCol=46
-CursorRow=156
-TopLine=216
+CursorCol=1
+CursorRow=187
+TopLine=166
 LeftChar=1
 [Editor_3]
 Open=1
@@ -32,8 +32,8 @@ LeftChar=1
 [Editor_4]
 Open=1
 Top=0
-CursorCol=37
-CursorRow=13
+CursorCol=64
+CursorRow=12
 TopLine=1
 LeftChar=1
 [Editor_5]
@@ -41,5 +41,5 @@ Open=1
 Top=0
 CursorCol=53
 CursorRow=102
-TopLine=82
+TopLine=11
 LeftChar=1
