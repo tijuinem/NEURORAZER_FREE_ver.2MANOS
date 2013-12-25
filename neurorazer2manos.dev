@@ -1,7 +1,7 @@
 [Project]
 FileName=neurorazer2manos.dev
 Name=neurorazer2manos
-UnitCount=5
+UnitCount=6
 Type=0
 Ver=1
 ObjFiles=
@@ -89,6 +89,16 @@ BuildCmd=
 
 [Unit5]
 FileName=presentacion.h
+CompileCpp=1
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit6]
+FileName=coches_a_mostrar.h
 CompileCpp=1
 Folder=
 Compile=1
