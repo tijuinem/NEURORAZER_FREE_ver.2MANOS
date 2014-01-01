@@ -1,10 +1,11 @@
-//      by Tijuinem :   tijuinem -at- gmail -dot- com                   //desarrollado con el proposito de aprender allegro :)
+//      by Tijuinem :   tijuinem -at- gmail -dot- com                   
 //      NeuroRAZER version "a dos manos2. versión libre del juego Neuroracer , en este caso poniendolo algo más dificil con dos coches en pantalla. Neuroracer es un videojuego creado para mejorar el rendimiento cognitivo. El primero que realmente funciona  ...
 //      Indice de versiones:
 //      versión alfa 1.0  11-12-2013                                    //version modo local
 //      versión alfa 1.1  12-12-2013                                    //carga pantallas ok.                                              
 //      versión alfa 1.2  13-12-2013                                    //desde esta versión se libera el código en github. se permite editar, borrar, coger, fork... aunque se agradecerán ampliaciones y mejoras.
 //      versión Beta 1.0  25-12-2013                                    //coches. camiones. activo segunda tarea cuando quiero. jugable.
+//      versión Beta 1.2  01-01-2014                                    //incrementar/decrementar vechiculos. quitar/poner tareas
 
        char version_ultima[80] = "version Beta 1.0  25-12-2013";        //actualizar aqui la versión a la hora de compilar
        char  programadores[80] = "tijuinem at gmail dot com";           //añade tu nombre o mail, para aparecer actualizado en los créditos :)
@@ -41,11 +42,10 @@
  int retraso_pintar = 1;   //1 si no FPS
  bool mostramos_coches=false, mostramos_bicis =false, mostramos_camiones = false;
  int numero_coches_a_incrementar =0, numero_bicis_a_incrementar =0 ,numero_camiones_a_incrementar =0; 
- char esto_es_si_bicis [20]=      "BICIS       SI",      esto_es_no_bicis [30]= "BICIS     NO(F3)";
- char esto_es_si_coches [20]=     "COCHES      SI",     esto_es_no_coches [30]= "COCHES    NO(F4)"; 
- char esto_es_si_camiones [20]=   "CAMIONES    SI",   esto_es_no_camiones [30]= "CAMIONES  NO(F5)"; 
- char esto_es_si_p_rojo [20]=     "P.ROJO      SI",     esto_es_no_p_rojo [30]= "P.ROJO    NO(F9)";
-
+ char esto_es_si_bicis [25]=      "BICIS      (F3/F4)",         esto_es_no_bicis [30]= "BICIS    NO(F3/F4)";
+ char esto_es_si_coches [25]=     "COCHES     (F5/F6)",        esto_es_no_coches [30]= "COCHES   NO(F5/F6)"; 
+ char esto_es_si_camiones [25]=   "CAMIONES   (F7/F8)",      esto_es_no_camiones [30]= "CAMIONES NO(F7/F8)"; 
+ char esto_es_si_p_rojo [25]=     "P.ROJO     SI(F9)",         esto_es_no_p_rojo [30]= "P.ROJO     NO(F9)";
  
 //-----------------------------------------------------------------------------cargo ficheros externos
 #include "carga_pantallas.h" 
@@ -54,7 +54,14 @@
 #include "salida.h"
 #include "coches_a_mostrar.h"
 
-
+//-------temporizadores---------------------------------------------------------temporizadores------------  
+      bool activa_titulo_vida_extra = false ;
+      volatile int cuenta_atras;
+      void mi_temporizador()
+      {            
+      cuenta_atras--; 
+      }
+      END_OF_FUNCTION(mi_temporizador);  
 //------------------------------------------------------------------------------funcion ppal 
 void main(void) 
 { 
@@ -71,6 +78,10 @@ int fin_juego = 0;
 clear_keybuf();                                                                 //Borra el buffer del teclado 
 acquire_screen();                                                               //Bloquea screen antes de dibujar en él, screen es el BITMAP por donde nos moveremos 
 
+//-------temporizadores------------------------------------------------------temporizadores------------   
+   LOCK_VARIABLE(contador);
+   LOCK_FUNCTION(mi_temporizador);  
+   
 //------------------------------------------------------------------------------tamaño coche_ppal
 int size_coche_x = 20; 
 int size_coche_y = 50; 
@@ -135,14 +146,13 @@ SAMPLE *choque;
         return;
     }
 //------------------------------------------------------------------------------presentación del juego
-clear(screen);                                                                                      
-PRESENTACION ();
-clear(screen);
-carga_pantalla (fondo_pantalla);
-    if (mostramos_bicis  == true )                                       
-        { bicis_a_mostrar  (6);}
-    if (mostramos_coches == true )
-        { coches_a_mostrar  (6);}
+ clear(screen);                                                                                      
+ PRESENTACION ();
+ clear(screen);
+ if (mostramos_bicis    == true ) {bicis_a_mostrar    (6); }
+ if (mostramos_coches   == true ) {coches_a_mostrar   (6); }
+ if (mostramos_camiones == true)  {camiones_a_mostrar (7); }       
+ install_int(mi_temporizador, 1000);      
 
 //------------------------------------------------------------------------------programacion ppal del juego   
 do
@@ -154,27 +164,34 @@ do
       recorre_y = recorre_y + velocidad_scroll;
       blit(fondo1, screen, 0, size_mapa_y - modo_pantallaX  - recorre_y , 0, 0, modo_pantallaX , modo_pantallaY );       //la primera pantalla empieza en el tamaño del mapa menos 480.
       
-      textprintf(screen, font, 10,10, palette_color[12], "Pantalla  %d", fondo_pantalla);
-      textprintf(screen, font, 10,20, palette_color[12], "VIDA PPAL  %d", vida_ppal);
-      textprintf(screen, font, 10,30, palette_color[12], "PUNTOS     %d", puntos_ppal);
-      textprintf(screen, font, 10,40, palette_color[12], "VELO       %d  F1-F2", velocidad_scroll);
-      textprintf(screen, font, 10,50, palette_color[12], "TURBO      %d  F11-F12", retraso_pintar);
+      //textprintf(screen, font, 10,10, palette_color[12], "Pantalla  %d", fondo_pantalla);     
+      //textprintf(screen, font, 10,200, palette_color[12], "8000 a  0   %d", fin_de_circuito_Y);
+      //textprintf(screen, font, 10,210, palette_color[12], "Recorre y   %d", recorre_y);
+      textprintf(screen, font, 10,10, palette_color[12], "VIDA      %d", vida_ppal);
+      textprintf(screen, font, 10,20, palette_color[12], "PUNTOS    %d", puntos_ppal);
+      textprintf(screen, font, 10,30, palette_color[14], "===================");
+      textprintf(screen, font, 10,40, palette_color[14], "                  %d ", velocidad_scroll);
+      textprintf(screen, font, 10,40, palette_color[12], "VELOCIDAD   F1/F2:");
+      textprintf(screen, font, 10,50, palette_color[12], "TURBO/FRENO F11/F12");
+      
       if (mostramos_bicis == true) 
-         { textout(screen, font, esto_es_si_bicis, 10, 70, palette_color[12]);   } 
-         else {textout(screen, font, esto_es_no_bicis, 10, 70, palette_color[9]);}
+         { textout(screen, font, esto_es_si_bicis, 10, 60, palette_color[12]);
+           textprintf(screen, font, 75,60, palette_color[14], "=%d ", numero_bicis_a_incrementar *6);    } 
+         else {textout(screen, font, esto_es_no_bicis, 10, 60, palette_color[9]);}
       if (mostramos_coches == true) 
-         { textout(screen, font, esto_es_si_coches, 10, 80, palette_color[12]);   } 
-         else {textout(screen, font, esto_es_no_coches, 10, 80, palette_color[9]);}
+         { textout(screen, font, esto_es_si_coches, 10, 70, palette_color[12]); 
+           textprintf(screen, font, 75,70, palette_color[14], "=%d ", numero_coches_a_incrementar *6);  } 
+         else {textout(screen, font, esto_es_no_coches, 10, 70, palette_color[9]);}
       if (mostramos_camiones == true) 
-         { textout(screen, font, esto_es_si_camiones, 10, 90, palette_color[12]);   } 
-         else {textout(screen, font, esto_es_no_camiones, 10, 90, palette_color[9]);}
+         { textout(screen, font, esto_es_si_camiones, 10, 80, palette_color[12]);
+           textprintf(screen, font, 75,80, palette_color[14], "=%d ", numero_camiones_a_incrementar *7);   } 
+         else {textout(screen, font, esto_es_no_camiones, 10, 80, palette_color[9]);}
       if (activar_punto_rojo == true) 
-         { textout(screen, font, esto_es_si_p_rojo, 10, 100, palette_color[12]);   } 
-         else {textout(screen, font, esto_es_no_p_rojo, 10, 100, palette_color[9]);}     
+         { textout(screen, font, esto_es_si_p_rojo, 10, 90, palette_color[12]); } 
+         else {textout(screen, font, esto_es_no_p_rojo, 10, 90, palette_color[9]);}     
       
       
-      textprintf(screen, font, 10,200, palette_color[12], "8000 a  0   %d", fin_de_circuito_Y);
-      textprintf(screen, font, 10,210, palette_color[12], "Recorre y   %d", recorre_y);
+     
       draw_sprite(screen, cochePPAL1, coordX_coche_1, coordY_coche_1); 
       draw_sprite(screen, cochePPAL2, coordX_coche_2, coordY_coche_2);
 
@@ -184,8 +201,9 @@ do
           recorre_y = - modo_pantallaY;
           pantallas_recorridas ++;
           size_pantalla_mostar = 0;
-          //textprintf(screen, font, 310,50, palette_color[15], "Vida + 100   %d", vida_ppal);
-          vida_ppal = vida_ppal +100;
+          activa_titulo_vida_extra = true ;
+          cuenta_atras = 2;  
+          vida_ppal = vida_ppal + 100;
           carga_pantalla (fondo_pantalla);
           if (mostramos_bicis  == true )                                        //lamo a los vehiculos a mostrar tantas veces como vaya marcando. cada vez, 6 coches.
               {
@@ -279,11 +297,14 @@ do
   {
     switch (readkey() >> 8) 
     {
+        
+        
         case KEY_F1:
             velocidad_scroll ++;
             break;
         case KEY_F2:
-            if ( velocidad_scroll < 1) { velocidad_scroll = 1; puntos_ppal --;}
+            if ( velocidad_scroll < 1) 
+            { velocidad_scroll = 1; puntos_ppal --;}
             velocidad_scroll --;
             break;
         case KEY_F3:
@@ -291,26 +312,45 @@ do
             mostramos_bicis =   true;
             break;
         case KEY_F4:
+            numero_bicis_a_incrementar --;
+            if (numero_bicis_a_incrementar <= 0) 
+            {numero_bicis_a_incrementar=0; mostramos_bicis = false;}
+            break;
+        case KEY_F5:
             numero_coches_a_incrementar ++;
             mostramos_coches =  true;
             break;
-        case KEY_F5:
+        case KEY_F6:
+            numero_coches_a_incrementar --;
+            if (numero_coches_a_incrementar <= 0) 
+            {numero_coches_a_incrementar=0; mostramos_coches = false;}
+            break;
+        case KEY_F7:
             numero_camiones_a_incrementar ++;
             mostramos_camiones =  true;
             break;
-       case KEY_F9:
-            activar_punto_rojo= true;
+        case KEY_F8:
+            numero_camiones_a_incrementar --;
+            if (numero_camiones_a_incrementar <= 0) 
+            {numero_camiones_a_incrementar=0; mostramos_camiones = false;}
             break;
+        case KEY_F9:
+            if (activar_punto_rojo==true ) {activar_punto_rojo = false;} 
+            else if (activar_punto_rojo == false) {activar_punto_rojo = true;}
+            break;    
         case KEY_F11:
-            retraso_pintar ++ ;
+            retraso_pintar -- ;
+            if (retraso_pintar <= 0) {retraso_pintar=0;}
             break;
         case KEY_F12:
-            if ( retraso_pintar < 1) { retraso_pintar = 1; puntos_ppal --;}
-            retraso_pintar --;
+            retraso_pintar ++;
+            break;
+        case KEY_O:
+            dificultad_aleatorio = 1000;                                     
             break;
         case KEY_P:
             puntos_ppal= puntos_ppal + 1000;                                    //haciendo trampas 
-            break;
+            break; 
     }
   }
   
@@ -326,14 +366,21 @@ do
   vida_ppal -- ;
   }
 //------------------------------------------------------------------------------penalizar que no ponga siempre el dedo en la barra espaciadora
-
+//------------------------------------------------------------------------------activa_titulos_vida_extra ---avisos de reloj------
+    if (activa_titulo_vida_extra == true  || cuenta_atras >=1 )
+          {    
+          textprintf(screen, font, 200,100, palette_color[15], " + 100 puntos de vida Extra");
+          textprintf(screen, font, 200,120, palette_color[15], "        Pantalla %d        " , pantallas_recorridas);          
+          activa_titulo_vida_extra = false;                    
+          }  
+          
 //-------------------------------------------------------------------------------trampas y puntos
   if ( (puntos_ppal > 1000000) ) { velocidad_scroll = 10; }
   if ( (puntos_ppal > 2000000) ) { velocidad_scroll = 25; }
   if ( (puntos_ppal > 5000000) ) { retraso_pintar   = 0; }                
   if (  vida_ppal <= 0 ) { 
-        fin_juego = 1; textout(screen, font, 
-        "Vida principal terminada. FIN de JUEGO", 200,200, palette_color[15]); 
+        fin_juego = 1; 
+        textout(screen, font, "Vida principal terminada. FIN de JUEGO", 200,200, palette_color[15]); 
         rest (2000); 
         SALIDA(); }
 
